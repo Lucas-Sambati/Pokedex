@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Treinadores - Pokedex</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, button {
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 100%;
+        }
+        #treinadores-list {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cadastro de Treinadores</h1>
+
+    <form id="treinadorForm">
+        <label for="nome">Nome do Treinador:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="idade">Idade do Treinador:</label>
+        <input type="number" id="idade" name="idade" required>
+
+        <label for="pokemons">Pokémons (separados por vírgula):</label>
+        <input type="text" id="pokemons" name="pokemons" placeholder="Ex: Pikachu, Charizard" required>
+
+        <button type="submit">Cadastrar Treinador</button>
+    </form>
+
+    <h2>Lista de Treinadores Cadastrados</h2>
+    <div id="treinadores-list"></div>
+
+    <script>
+        const form = document.getElementById('treinadorForm');
+        const treinadoresList = document.getElementById('treinadores-list');
+
+        // Função para cadastrar treinador
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            
+            const nome = document.getElementById('nome').value;
+            const idade = document.getElementById('idade').value;
+            const pokemons = document.getElementById('pokemons').value.split(',');
+
+            // Enviando dados do treinador via POST
+            fetch('/treinador/cadastrar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nome, idade, pokemons })
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                listarTreinadores(); // Atualiza a lista de treinadores
+                form.reset(); // Reseta o formulário
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+        });
+
+        // Função para listar treinadores
+        function listarTreinadores() {
+            fetch('/treinador/listar')
+                .then(response => response.json())
+                .then(data => {
+                    treinadoresList.innerHTML = ''; // Limpa a lista antes de atualizá-la
+                    if (data.length === 0) {
+                        treinadoresList.innerHTML = 'Nenhum treinador cadastrado.';
+                    } else {
+                        data.forEach(treinador => {
+                            const div = document.createElement('div');
+                            div.innerHTML = `
+                                <p><strong>Nome:</strong> ${treinador.nome}</p>
+                                <p><strong>Idade:</strong> ${treinador.idade}</p>
+                                <p><strong>Pokémons:</strong> ${treinador.pokemons.join(', ')}</p>
+                            `;
+                            treinadoresList.appendChild(div);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao listar treinadores:', error);
+                });
+        }
+
+        // Chamada inicial para listar treinadores ao carregar a página
+        listarTreinadores();
+    </script>
+</body>
+</html>
