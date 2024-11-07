@@ -5,14 +5,37 @@
     <title>Pokédex</title>
 </head>
 <body>
-    <h1>Pokédex</h1>
-    <ul>
-        <% pokemons.forEach(function(pokemon) { %>
-            <li>
-                <a href="/pokemon/<%= pokemon.id %>"><%= pokemon.nome %>
-                </a> - <%= pokemon.tipo %>
-            </li>
-        <% }); %>
-    </ul>
+    <h1>POKÉDEX</h1>
+    <div id="pokemons">
+        <h2>Pokemons</h2>
+        <a href="/newPokemon">
+            <button>Adicionar Novo Pokémon</button>
+        </a>
+        <ul>
+            <% pokemons.forEach(function(pokemon) { %>
+                <li>
+                    <a href="/pokemon/<%= pokemon.id %>">
+                        <%= pokemon.nome %>
+                    </a> - <%=pokemon.tipo %>
+                </li>
+                <% }); %>
+        </ul>
+    </div>
+
+    <div id="treinadores">
+        <h2>Treinadores</h2>
+        <a href="/newTreinador">
+            <button>Adicionar Novo Treinador</button>
+        </a>
+        <ul>
+            <% treinadores.forEach(function(treinador) { %>
+                <li>
+                    <a href="/treinador/<%= treinador.id %>">
+                        <%= treinador.nome %>
+                    </a> - <%=treinador.pokemon %>
+                </li>
+                <% }); %>
+        </ul>
+    </div>
 </body>
 </html>

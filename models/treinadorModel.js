@@ -1,13 +1,18 @@
-// /models/treinadorModel.js
-class Treinador {
-    constructor(nome, idade, pokemons) {
-        if (!Array.isArray(pokemons) || pokemons.length === 0) {
-            throw new Error("Um treinador deve ter ao menos um Pokémon.");
-        }
-        this.nome = nome;
-        this.idade = idade;
-        this.pokemons = pokemons; // Lista de Pokémons atribuída ao treinador
-    }
-}
+const treinador = [
+    { id: 1, nome: 'Bulbassauro', pokemon: 'Vegetal/Veneno' },
+    { id: 2, nome: 'Squirtle', pokemon: 'Água' },
+    { id: 3, nome: 'Charmander', pokemon: 'Fogo' }
+];
 
-module.exports = Treinador;
+const getTreinadores = () => treinadores;
+const getTreinadorById = (id) => treinadores.find(p => p.id === parseInt(id));
+const createTreinador = (nome, pokemon) => {
+    const novoTreinador = {
+        id: treinadores.length + 1,
+        nome,
+        pokemon
+    };
+    treinadores.push(novoTreinador);
+};
+
+module.exports = { getTreinadores, getTreinadorById, createTreinador };

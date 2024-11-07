@@ -1,17 +1,20 @@
-// /routes/treinadorRoutes.js
+const express = require('express');
+const router = express.Router();
 const treinadorController = require('../controllers/treinadorController');
+const treinadorModel = require('../models/treinaorModel');
 
-function rotasTreinador(app) {
-    app.post('/treinador/cadastrar', (req, res) => {
-        const { nome, idade, pokemons } = req.body;
-        const resultado = treinadorController.cadastrarTreinador(nome, idade, pokemons);
-        res.send(resultado);
-    });
+router.get('/', treinadorController.getAllTreinadores);
+router.get('/treinador/:id', treinadorController.getTreinador);
 
-    app.get('/treinador/listar', (req, res) => {
-        const resultado = treinadorController.listarTreinadores();
-        res.send(resultado);
-    });
-}
+// POST para criar novos treinadores
+router.post('/treinador', (req, res) => {
+    const { nome, tipo } = req.body;
+    treinadorModel.createTreinador(nome, tipo);
+    res.redirect('/');
+});
 
-module.exports = rotasTreinador;
+router.get('/newTreinador', (req, res) => {
+    res.render('newTreinador'); // Renderiza o formulário para criar um novo Treinador
+});
+
+module.exports = router;

@@ -1,30 +1,17 @@
-// /controllers/treinadorController.js
-const Treinador = require('../models/treinadorModel');
+const treinadorModel = require('../models/treinadorModel');
 
-class TreinadorController {
-    constructor() {
-        this.treinadores = [];
+const getAllTreinadores = (req, res) => {
+    const treinadores = treinadorModel.getTreinadores();
+    res.render('index', { treinadores });
+};
+
+const getTreinador = (req, res) => {
+    const treinador = treinadorModel.getTreinadorById(req.params.id);
+    if(treinador) {
+        res.render('treinador', { treinador });
+    } else {
+        res.status(404).send('Treinador não encontrado.');
     }
+};
 
-    cadastrarTreinador(nome, idade, pokemons) {
-        try {
-            const novoTreinador = new Treinador(nome, idade, pokemons);
-            this.treinadores.push(novoTreinador);
-            return `Treinador ${nome} cadastrado com sucesso!`;
-        } catch (error) {
-            return `Erro ao cadastrar treinador: ${error.message}`;
-        }
-    }
-
-    listarTreinadores() {
-        if (this.treinadores.length === 0) {
-            return "Nenhum treinador cadastrado.";
-        } else {
-            return this.treinadores.map(treinador => {
-                return `Nome: ${treinador.nome}, Idade: ${treinador.idade}, Pokémons: ${treinador.pokemons.join(', ')}`;
-            });
-        }
-    }
-}
-
-module.exports = new TreinadorController();
+module.exports = { getAllTreinadores, getTreinador };
