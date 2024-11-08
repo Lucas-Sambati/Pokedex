@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Treinador</title>
+</head>
+<body>
+    <h1>Cadastrar Novo Treinador</h1>
+    <form action="/treinador" method="POST">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="pokemon">Escolha um Pokémon:</label>
+        <select id="pokemon" name="pokemon" required>
+            <option value="">Selecione um Pokémon</option>
+            <% pokemons.forEach(pokemon => { %>
+                <option value="<%= pokemon.nome %>"><%= pokemon.nome %></option>
+            <% }); %>
+        </select>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+    <a href="/">Voltar à Pokédex</a>
+</body>
+</html>
