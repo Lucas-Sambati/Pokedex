@@ -1,19 +1,28 @@
-const treinadores = [
-    { id: 1, nome: 'Carlos', pokemon: 'Bulbassauro' },
-    { id: 2, nome: 'Silva', pokemon: 'Bulbassauro' },
-    { id: 3, nome: 'Tiago', pokemon: 'Bulbassauro' }
-];
+const { Treinador, Pokemon } = require('./index');  // A importação correta
 
-const getTreinadores = () => treinadores;
-const getTreinadorById = (id) => treinadores.find(p => p.id === parseInt(id));
+const getTreinadores = async () => {
+  return await Treinador.findAll({
+    include: {
+      model: Pokemon,
+      attributes: ['nome']
+    }
+  });
+};
 
-const createTreinador = (nome, pokemon) => {
-    const novoTreinador = {
-        id: treinadores.length + 1,
-        nome,
-        pokemon
-    };
-    treinadores.push(novoTreinador); // Adiciona o novo treinador à lista
+const getTreinadorById = async (id) => {
+  return await Treinador.findByPk(id, {
+    include: {
+      model: Pokemon,
+      attributes: ['nome']
+    }
+  });
+};
+
+const createTreinador = async (nome, pokemonId) => {
+  return await Treinador.create({ nome, pokemonId });
 };
 
 module.exports = { getTreinadores, getTreinadorById, createTreinador };
+
+
+

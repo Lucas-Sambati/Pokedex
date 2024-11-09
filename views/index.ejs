@@ -16,9 +16,9 @@
                 <li>
                     <a href="/pokemon/<%= pokemon.id %>">
                         <%= pokemon.nome %>
-                    </a> - <%=pokemon.tipo %>
+                    </a> - <%= pokemon.tipo %>
                 </li>
-                <% }); %>
+            <% }); %>
         </ul>
     </div>
 
@@ -32,9 +32,9 @@
                 <li>
                     <a href="/treinador/<%= treinador.id %>">
                         <%= treinador.nome %>
-                    </a> - <%=treinador.pokemon %>
+                    </a> - <%= treinador.pokemon ? treinador.pokemon.nome : 'Sem Pokémon' %>
                 </li>
-                <% }); %>
+            <% }); %>
         </ul>
     </div>
 </body>

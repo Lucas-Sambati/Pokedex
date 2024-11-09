@@ -1,17 +1,25 @@
-const pokemonModel = require('../models/pokemonModel');
+const Pokemon = require('../models/pokemonModel');
 
-const getAllPokemons = (req, res) => {
-    const pokemons = pokemonModel.getPokemons();
+const getAllPokemons = async (req, res) => {
+  try {
+    const pokemons = await Pokemon.findAll();
     res.render('index', { pokemons });
+  } catch (error) {
+    res.status(500).send('Erro ao buscar Pokémons');
+  }
 };
 
-const getPokemon = (req, res) => {
-    const pokemon = pokemonModel.getPokemonById(req.params.id);
-    if(pokemon) {
-        res.render('pokemon', { pokemon });
+const getPokemon = async (req, res) => {
+  try {
+    const pokemon = await Pokemon.findByPk(req.params.id);
+    if (pokemon) {
+      res.render('pokemon', { pokemon });
     } else {
-        res.status(404).send('Pokémon não encontrado.');
+      res.status(404).send('Pokémon não encontrado');
     }
+  } catch (error) {
+    res.status(500).send('Erro ao buscar Pokémon');
+  }
 };
 
 module.exports = { getAllPokemons, getPokemon };

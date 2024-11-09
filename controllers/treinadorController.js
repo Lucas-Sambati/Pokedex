@@ -1,31 +1,49 @@
-const treinadorModel = require('../models/treinadorModel');
-const pokemonModel = require('../models/pokemonModel'); 
+const Treinador = require('../models/treinadorModel');
+const Pokemon = require('../models/pokemonModel');
 
-const getAllTreinadores = (req, res) => {
-    const treinadores = treinadorModel.getTreinadores();
+const getAllTreinadores = async (req, res) => {
+  try {
+    const treinadores = await Treinador.findAll({
+      include: Pokemon,  // Inclui o Pokémon associado a cada treinador
+    });
     res.render('index', { treinadores });
+  } catch (error) {
+    res.status(500).send('Erro ao buscar Treinadores');
+  }
 };
 
-const getTreinador = (req, res) => {
-    const treinador = treinadorModel.getTreinadorById(req.params.id);
+const getTreinador = async (req, res) => {
+  try {
+    const treinador = await Treinador.findByPk(req.params.id, {
+      include: Pokemon,  // Inclui o Pokémon associado
+    });
     if (treinador) {
-        res.render('treinador', { treinador });
+      res.render('treinador', { treinador });
     } else {
-        res.status(404).send('Treinador não encontrado.');
+      res.status(404).send('Treinador não encontrado');
     }
+  } catch (error) {
+    res.status(500).send('Erro ao buscar Treinador');
+  }
 };
 
-// Rota para exibir o formulário de criação de treinador com a lista de Pokémons
-const getNewTreinadorForm = (req, res) => {
-    const pokemons = pokemonModel.getPokemons(); // Pega os Pokémons
-    res.render('newTreinador', { pokemons }); // Passa os Pokémons para o formulário
+const getNewTreinadorForm = async (req, res) => {
+  try {
+    const pokemons = await Pokemon.findAll();
+    res.render('newTreinador', { pokemons });
+  } catch (error) {
+    res.status(500).send('Erro ao carregar Pokémons');
+  }
 };
 
-// Rota para criar um novo treinador
-const createTreinador = (req, res) => {
-    const { nome, pokemon } = req.body; // Recebe o nome do treinador e o Pokémon
-    treinadorModel.createTreinador(nome, pokemon); // Cria o treinador
-    res.redirect('/'); // Redireciona para a página principal
+const createTreinador = async (req, res) => {
+  try {
+    const { nome, pokemonId } = req.body;
+    await Treinador.create({ nome, pokemonId });
+    res.redirect('/');
+  } catch (error) {
+    res.status(500).send('Erro ao criar Treinador');
+  }
 };
 
 module.exports = { getAllTreinadores, getTreinador, getNewTreinadorForm, createTreinador };

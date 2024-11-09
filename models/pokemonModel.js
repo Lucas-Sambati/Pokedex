@@ -1,18 +1,17 @@
-const pokemons = [
-    { id: 1, nome: 'Bulbassauro', tipo: 'Vegetal/Veneno' },
-    { id: 2, nome: 'Squirtle', tipo: 'Água' },
-    { id: 3, nome: 'Charmander', tipo: 'Fogo' }
-];
+const { Pokemon } = require('./index');  // A importação correta
 
-const getPokemons = () => pokemons;
-const getPokemonById = (id) => pokemons.find(p => p.id === parseInt(id));
-const createPokemon = (nome, tipo) => {
-    const novoPokemon = {
-        id: pokemons.length + 1,
-        nome,
-        tipo
-    };
-    pokemons.push(novoPokemon);
+const getPokemons = async () => {
+  return await Pokemon.findAll();
+};
+
+const getPokemonById = async (id) => {
+  return await Pokemon.findByPk(id);
+};
+
+const createPokemon = async (nome, tipo) => {
+  return await Pokemon.create({ nome, tipo });
 };
 
 module.exports = { getPokemons, getPokemonById, createPokemon };
+
+
